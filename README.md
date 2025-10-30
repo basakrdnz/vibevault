@@ -1,5 +1,12 @@
 # VibeVault - Duygusal Film Takip Platformu
 
+## 🎥 Demo Video
+
+- Dosya: `vibevault/public/videos/VibeVaultVideo.mp4`
+- Hızlı izleme (repo içi yol): [VibeVaultVideo.mp4](vibevault/public/videos/VibeVaultVideo.mp4)
+
+<video src="vibevault/public/videos/VibeVaultVideo.mp4" controls width="720"></video>
+
 Modern film keşfi ve duygusal deneyim takibi için geliştirilmiş kapsamlı NextJS uygulaması. Akıllı film keşfi, kişiselleştirilmiş izleme listeleri ve duygusal mood takibi özelliklerine sahip.
 
 ## ✨ Özellikler
