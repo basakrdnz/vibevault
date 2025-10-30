@@ -2,10 +2,10 @@
 
 ## 🎥 Demo Video
 
-- Dosya: `vibevault/public/videos/VibeVaultVideo.mp4`
-- Hızlı izleme (repo içi yol): [VibeVaultVideo.mp4](vibevault/public/videos/VibeVaultVideo.mp4)
-
-<video src="vibevault/public/videos/VibeVaultVideo.mp4" controls width="720"></video>
+<video width="720" controls>
+  <source src="https://raw.githubusercontent.com/[OWNER]/[REPO]/main/vibevault/public/videos/VibeVaultVideo.mp4" type="video/mp4">
+  <a href="https://raw.githubusercontent.com/[OWNER]/[REPO]/main/vibevault/public/videos/VibeVaultVideo.mp4">Video izlemek için tıklayın</a>
+</video>
 
 Modern film keşfi ve duygusal deneyim takibi için geliştirilmiş kapsamlı NextJS uygulaması. Akıllı film keşfi, kişiselleştirilmiş izleme listeleri ve duygusal mood takibi özelliklerine sahip.
 
