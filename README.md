@@ -84,9 +84,7 @@ Modern film keşfi ve duygusal deneyim takibi için geliştirilmiş kapsamlı Ne
    `.env.local` dosyası oluşturun:
    ```env
    DATABASE_URL="file:./dev.db"
-   AUTH_SECRET="your-secret-key-here"
-   AUTH_URL="http://localhost:3002"
-   NEXTAUTH_URL="http://localhost:3002"
+   NEXTAUTH_URL="http://localhost:3000"
    NEXTAUTH_SECRET="your-secret-key-here"
    ```
 
@@ -103,7 +101,7 @@ Modern film keşfi ve duygusal deneyim takibi için geliştirilmiş kapsamlı Ne
    ```
 
 5. **Tarayıcınızı açın**:
-   [http://localhost:3002](http://localhost:3002) adresine gidin
+   [http://localhost:3000](http://localhost:3000) adresine gidin
 
 6. **Test Girişi**:
    - Email: `test@example.com`
