@@ -1,0 +1,470 @@
+openapi: 3.0.3
+info:
+  title: VibeVault Authentication API
+  description: API for VibeVault landing page and authentication system
+  version: 1.0.0
+  contact:
+    name: VibeVault Team
+    email: support@vibevault.com
+
+servers:
+  - url: https://api.vibevault.com
+    description: Production server
+  - url: http://localhost:3000
+    description: Development server
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      description: Create a new user account with email and password
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              email: "user@example.com"
+              password: "SecurePass123"
+              name: "John Doe"
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/login:
+    post:
+      summary: Login user
+      description: Authenticate user with email and password
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: "user@example.com"
+              password: "SecurePass123"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Too many login attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/logout:
+    post:
+      summary: Logout user
+      description: Invalidate user session
+      tags:
+        - Authentication
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/me:
+    get:
+      summary: Get current user
+      description: Get information about the currently authenticated user
+      tags:
+        - Authentication
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/forgot-password:
+    post:
+      summary: Request password reset
+      description: Send password reset email to user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+            example:
+              email: "user@example.com"
+      responses:
+        '200':
+          description: Password reset email sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Email not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/reset-password:
+    post:
+      summary: Reset password
+      description: Reset user password with token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+            example:
+              token: "reset-token-here"
+              password: "NewSecurePass123"
+      responses:
+        '200':
+          description: Password reset successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid token or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '410':
+          description: Token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/verify-email:
+    post:
+      summary: Verify email address
+      description: Verify user email with token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+            example:
+              token: "verification-token-here"
+      responses:
+        '200':
+          description: Email verified successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '410':
+          description: Token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/health:
+    get:
+      summary: Health check
+      description: Check API health status
+      tags:
+        - System
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: next-auth.session-token
+      description: Session token stored in HTTP-only cookie
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: "user@example.com"
+        password:
+          type: string
+          minLength: 8
+          description: User password (min 8 chars, must contain uppercase, lowercase, number)
+          example: "SecurePass123"
+        name:
+          type: string
+          minLength: 2
+          description: User display name (optional)
+          example: "John Doe"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: "user@example.com"
+        password:
+          type: string
+          description: User password
+          example: "SecurePass123"
+
+    ForgotPasswordRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: "user@example.com"
+
+    ResetPasswordRequest:
+      type: object
+      required:
+        - token
+        - password
+      properties:
+        token:
+          type: string
+          description: Password reset token
+          example: "reset-token-here"
+        password:
+          type: string
+          minLength: 8
+          description: New password (min 8 chars, must contain uppercase, lowercase, number)
+          example: "NewSecurePass123"
+
+    VerifyEmailRequest:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: Email verification token
+          example: "verification-token-here"
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: User unique identifier
+          example: "clh1234567890"
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: "user@example.com"
+        name:
+          type: string
+          description: User display name
+          example: "John Doe"
+        emailVerified:
+          type: string
+          format: date-time
+          description: Email verification timestamp
+          example: "2025-01-27T10:30:00Z"
+        image:
+          type: string
+          format: uri
+          description: User profile image URL
+          example: "https://example.com/avatar.jpg"
+        createdAt:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+          example: "2025-01-27T10:00:00Z"
+
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserResponse'
+        session:
+          type: object
+          properties:
+            expires:
+              type: string
+              format: date-time
+              description: Session expiration timestamp
+              example: "2025-02-26T10:30:00Z"
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          description: Success message
+          example: "Operation completed successfully"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: Error message
+          example: "Invalid email format"
+        code:
+          type: string
+          description: Error code
+          example: "VALIDATION_ERROR"
+        details:
+          type: object
+          description: Additional error details
+          example:
+            field: "email"
+            message: "Invalid email format"
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          example: "healthy"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-01-27T10:30:00Z"
+        version:
+          type: string
+          example: "1.0.0"
+        database:
+          type: string
+          enum: [connected, disconnected]
+          example: "connected"
