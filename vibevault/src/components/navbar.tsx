@@ -13,7 +13,7 @@ import {
   Menu, 
   X,
   Film,
-  Star,
+  Users,
   Bookmark
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -40,7 +40,7 @@ export function Navbar({ user }: NavbarProps) {
     { href: '/movies', label: 'Movies', icon: Film },
     { href: '/watchlist', label: 'Watchlist', icon: Bookmark },
     { href: '/mood-tracker', label: 'Mood Tracker', icon: Heart },
-    { href: '/recommendations', label: 'Recommendations', icon: Star },
+    { href: '/social/friends', label: 'Friends', icon: Users },
   ];
 
   return (

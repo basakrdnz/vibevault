@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import SocialSettingsForm from '@/components/social/social-settings-form';
 
 interface UserProfile {
   id: string;
@@ -342,6 +343,22 @@ export default function UserProfilePage() {
               </div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Social Privacy Settings */}
+      <Card className="bg-white/15 backdrop-blur-md border-white/30 shadow-2xl">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <Settings className="h-5 w-5 text-orange-500" />
+            Social Privacy
+          </CardTitle>
+          <CardDescription className="text-gray-300">
+            Control what friends can see
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SocialSettingsForm />
         </CardContent>
       </Card>
 

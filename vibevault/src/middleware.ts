@@ -20,7 +20,7 @@ export default auth((req) => {
     nextUrl.pathname.startsWith('/movies') ||
     nextUrl.pathname.startsWith('/mood-tracker') ||
     nextUrl.pathname.startsWith('/profile') ||
-    nextUrl.pathname.startsWith('/recommendations')
+    nextUrl.pathname.startsWith('/social')
   )) {
     return NextResponse.redirect(new URL('/login', nextUrl));
   }
@@ -35,7 +35,7 @@ export const config = {
     '/movies/:path*',
     '/mood-tracker/:path*',
     '/profile/:path*',
-    '/recommendations/:path*',
+    '/social/:path*',
     '/api/auth/register',
   ],
 };

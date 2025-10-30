@@ -526,22 +526,66 @@ async function seedUsers() {
   console.log('👤 Starting to seed users...');
   
   try {
-    const testUser = await prisma.user.findFirst({
-      where: { email: 'test@example.com' }
-    });
-
-    if (!testUser) {
+    const ensureUser = async (email: string, name: string) => {
+      const existing = await prisma.user.findFirst({ where: { email } });
+      if (existing) return existing;
       const hashedPassword = await bcrypt.hash('password123', 12);
-      await prisma.user.create({
-        data: {
-          email: 'test@example.com',
-          password: hashedPassword,
-          name: 'Test User'
-        }
+      const created = await prisma.user.create({
+        data: { email, password: hashedPassword, name }
       });
-      console.log('✅ Added test user: test@example.com / password123');
-    } else {
-      console.log('⏭️ Test user already exists');
+      console.log(`✅ Added user: ${email} / password123`);
+      return created;
+    };
+
+    const testUser = await ensureUser('test@example.com', 'Test User');
+    const alice = await ensureUser('alice@example.com', 'Alice');
+    const bob = await ensureUser('bob@example.com', 'Bob');
+    const charlie = await ensureUser('charlie@example.com', 'Charlie');
+
+    // Social settings defaults
+    const ensureSettings = async (userId: string) => {
+      await prisma.socialSettings.upsert({
+        where: { userId },
+        update: {},
+        create: { userId }
+      });
+    };
+    await Promise.all([
+      ensureSettings(testUser.id),
+      ensureSettings(alice.id),
+      ensureSettings(bob.id),
+      ensureSettings(charlie.id),
+    ]);
+
+    // Friendships and pending requests
+    const makeFriendship = async (a: string, b: string) => {
+      const [idA, idB] = a < b ? [a, b] : [b, a];
+      await prisma.friendship.upsert({
+        where: { userAId_userBId: { userAId: idA, userBId: idB } },
+        update: {},
+        create: { userAId: idA, userBId: idB }
+      });
+    };
+
+    // test <-> alice friends
+    await makeFriendship(testUser.id, alice.id);
+
+    // pending: test -> bob
+    const existingReq1 = await prisma.friendRequest.findFirst({
+      where: { senderId: testUser.id, receiverId: bob.id, status: 'pending' }
+    });
+    if (!existingReq1) {
+      await prisma.friendRequest.create({ data: { senderId: testUser.id, receiverId: bob.id } });
+      console.log('✅ Seeded pending friend request: test -> bob');
+    }
+
+    // pending: charlie -> test
+    const existingReq2 = await prisma.friendRequest.findFirst({
+      where: { senderId: charlie.id, receiverId: testUser.id, status: 'pending' }
+    });
+    if (!existingReq2) {
+      await prisma.friendRequest.create({ data: { senderId: charlie.id, receiverId: testUser.id } });
+      console.log('✅ Seeded pending friend request: charlie -> test');
     }
   } catch (error) {
     console.error('❌ Error seeding users:', error);
