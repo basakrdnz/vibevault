@@ -2,10 +2,13 @@
 
 ## 🎥 Demo Video
 
-<video width="720" controls>
-  <source src="https://raw.githubusercontent.com/[OWNER]/[REPO]/main/vibevault/public/videos/VibeVaultVideo.mp4" type="video/mp4">
-  <a href="https://raw.githubusercontent.com/[OWNER]/[REPO]/main/vibevault/public/videos/VibeVaultVideo.mp4">Video izlemek için tıklayın</a>
-</video>
+Video'yu izlemek için [buraya tıklayın](vibevault/public/videos/VibeVaultVideo.mp4)
+
+> **Alternatif**: Video'yu YouTube/Vimeo'ya yükleyip aşağıdaki gibi embed edebilirsiniz:
+> 
+> ```html
+> <iframe width="720" height="405" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+> ```
 
 Modern film keşfi ve duygusal deneyim takibi için geliştirilmiş kapsamlı NextJS uygulaması. Akıllı film keşfi, kişiselleştirilmiş izleme listeleri ve duygusal mood takibi özelliklerine sahip.
 
