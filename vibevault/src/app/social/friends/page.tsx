@@ -6,7 +6,7 @@ import { listFriends } from '@/lib/social-service';
 
 export default async function FriendsPage() {
   const session = await auth();
-  if (!session) redirect('/login');
+  if (!session?.user?.id) redirect('/login');
 
   const friends = await listFriends(session.user.id);
 

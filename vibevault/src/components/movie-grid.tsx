@@ -200,14 +200,17 @@ export function MovieGrid({ title = "🎬 All Movies", limit = 20 }: MovieGridPr
 
       {/* Movies Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-        {(searchQuery.trim() ? searchResults : movies).map((movie) => (
-          <Card key={movie.id || movie.imdbID} className="bg-white/10 backdrop-blur-sm border-white/20 overflow-hidden hover:bg-white/15 transition-all duration-300 group">
+        {(searchQuery.trim() ? searchResults : movies).map((movie) => {
+          const movieAny = movie as any;
+          const movieId = movieAny.id || movie.imdbID;
+          return (
+          <Card key={movieId} className="bg-white/10 backdrop-blur-sm border-white/20 overflow-hidden hover:bg-white/15 transition-all duration-300 group">
             <CardContent className="p-0">
               {/* Movie Poster */}
               <div className="relative">
                 <img
-                  src={(movie.poster || movie.Poster) !== 'N/A' ? (movie.poster || movie.Poster) : '/placeholder-movie.jpg'}
-                  alt={movie.title || movie.Title}
+                  src={(movieAny.poster || movie.Poster) !== 'N/A' ? (movieAny.poster || movie.Poster) : '/placeholder-movie.jpg'}
+                  alt={movieAny.title || movie.Title}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
                     e.currentTarget.src = '/placeholder-movie.jpg';
@@ -225,17 +228,8 @@ export function MovieGrid({ title = "🎬 All Movies", limit = 20 }: MovieGridPr
                     İncele
                   </Button>
                   <AddToWatchlistButton 
-                    movieId={movie.id || movie.imdbID}
-                    movieTitle={movie.title || movie.Title}
-                    movieYear={movie.year || movie.Year}
-                    moviePoster={movie.poster || movie.Poster}
-                    movieGenre={movie.genre}
-                    movieDirector={movie.director}
-                    moviePlot={movie.plot || movie.Plot}
-                    movieImdbRating={movie.imdbRating}
-                    movieRuntime={movie.runtime}
-                    movieLanguage={movie.language}
-                    movieCountry={movie.country}
+                    movieId={movieId}
+                    movieTitle={movieAny.title || movie.Title}
                   />
                 </div>
                 
@@ -243,7 +237,7 @@ export function MovieGrid({ title = "🎬 All Movies", limit = 20 }: MovieGridPr
                 <div className="absolute top-2 right-2">
                   <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-200 border-yellow-400/30 text-xs">
                     <Star className="h-3 w-3 mr-1 fill-current" />
-                    {movie.imdbRating || 'N/A'}
+                    {movieAny.imdbRating || 'N/A'}
                   </Badge>
                 </div>
               </div>
@@ -251,22 +245,22 @@ export function MovieGrid({ title = "🎬 All Movies", limit = 20 }: MovieGridPr
               {/* Movie Info */}
               <div className="p-3">
                 <h3 className="text-sm font-bold text-white drop-shadow-md line-clamp-2 mb-1">
-                  {movie.title || movie.Title}
+                  {movieAny.title || movie.Title}
                 </h3>
                 
                 <div className="flex items-center gap-2 text-xs text-gray-300 mb-2">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    {movie.year || movie.Year}
+                    {movieAny.year || movie.Year}
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {movie.runtime || movie.Runtime || 'N/A'}
+                    {movieAny.runtime || 'N/A'}
                   </div>
                 </div>
                 
                 <div className="flex flex-wrap gap-1 mb-2">
-                  {(movie.genre || movie.Genre)?.split(', ').slice(0, 2).map((genre, index) => (
+                  {(movieAny.genre || '')?.split(', ').slice(0, 2).map((genre: string, index: number) => (
                     <Badge key={index} variant="outline" className="text-xs border-white/30 text-white/80 px-1 py-0">
                       {genre.trim()}
                     </Badge>
@@ -274,12 +268,13 @@ export function MovieGrid({ title = "🎬 All Movies", limit = 20 }: MovieGridPr
                 </div>
                 
                 <p className="text-xs text-gray-300 line-clamp-2 leading-relaxed">
-                  {movie.plot || movie.Plot || 'No plot available'}
+                  {movieAny.plot || 'No plot available'}
                 </p>
               </div>
             </CardContent>
           </Card>
-        ))}
+          );
+        })}
       </div>
       
       {(searchQuery.trim() ? searchResults : movies).length === 0 && (

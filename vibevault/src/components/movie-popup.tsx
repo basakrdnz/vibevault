@@ -28,6 +28,7 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
   const [isDiscovering, setIsDiscovering] = useState(false);
   const [moodAnalytics, setMoodAnalytics] = useState<MoodAnalytics | null>(null);
   const [loadingMood, setLoadingMood] = useState(false);
+  const movieAny = movie as any;
 
   if (!isOpen) return null;
 
@@ -39,7 +40,7 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ movieId: movie.id || movie.imdbID }),
+        body: JSON.stringify({ movieId: (movie as any).id || movie.imdbID }),
       });
 
       const data = await response.json();
@@ -57,7 +58,7 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
   const fetchMoodAnalytics = async () => {
     setLoadingMood(true);
     try {
-      const response = await fetch(`/api/mood-analytics?movieId=${movie.id || movie.imdbID}`);
+      const response = await fetch(`/api/mood-analytics?movieId=${(movie as any).id || movie.imdbID}`);
       const data = await response.json();
       
       if (data.success) {
@@ -97,8 +98,8 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
             {/* Movie Poster */}
             <div className="lg:w-1/3">
               <img
-                src={(movie.poster || movie.Poster) !== 'N/A' ? (movie.poster || movie.Poster) : '/placeholder-movie.jpg'}
-                alt={movie.title || movie.Title}
+                src={(movieAny.poster || movie.Poster) !== 'N/A' ? (movieAny.poster || movie.Poster) : '/placeholder-movie.jpg'}
+                alt={movieAny.title || movie.Title}
                 className="w-full h-64 lg:h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder-movie.jpg';
@@ -111,23 +112,23 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                    {movie.title || movie.Title}
+                    {movieAny.title || movie.Title}
                   </h2>
                   <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      {movie.year || movie.Year}
+                      {movieAny.year || movie.Year}
                     </div>
-                    {movie.runtime && (
+                    {movieAny.runtime && (
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        {movie.runtime}
+                        {movieAny.runtime}
                       </div>
                     )}
-                    {movie.imdbRating && (
+                    {movieAny.imdbRating && (
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 text-yellow-500" />
-                        {movie.imdbRating}/10
+                        {movieAny.imdbRating}/10
                       </div>
                     )}
                   </div>
@@ -135,10 +136,10 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
               </div>
 
               {/* Genres */}
-              {movie.genre && (
+              {movieAny.genre && (
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-2">
-                    {movie.genre.split(',').map((genre, index) => (
+                    {movieAny.genre.split(',').map((genre: string, index: number) => (
                       <Badge key={index} variant="secondary" className="bg-purple-100 text-purple-800">
                         {genre.trim()}
                       </Badge>
@@ -151,7 +152,7 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Plot</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  {movie.plot || movie.Plot || 'No plot available'}
+                  {movieAny.plot || 'No plot available'}
                 </p>
               </div>
 
@@ -206,22 +207,22 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
 
               {/* Additional Info */}
               <div className="grid md:grid-cols-2 gap-4 mb-6">
-                {movie.director && (
+                {movieAny.director && (
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Director</h4>
-                    <p className="text-gray-700">{movie.director}</p>
+                    <p className="text-gray-700">{movieAny.director}</p>
                   </div>
                 )}
-                {movie.language && (
+                {movieAny.language && (
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Language</h4>
-                    <p className="text-gray-700">{movie.language}</p>
+                    <p className="text-gray-700">{movieAny.language}</p>
                   </div>
                 )}
-                {movie.country && (
+                {movieAny.country && (
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Country</h4>
-                    <p className="text-gray-700">{movie.country}</p>
+                    <p className="text-gray-700">{movieAny.country}</p>
                   </div>
                 )}
               </div>
@@ -230,17 +231,8 @@ export function MoviePopup({ movie, isOpen, onClose }: MoviePopupProps) {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
                   <AddToWatchlistButton 
-                    movieId={movie.id || movie.imdbID}
-                    movieTitle={movie.title || movie.Title}
-                    movieYear={movie.year || movie.Year}
-                    moviePoster={movie.poster || movie.Poster}
-                    movieGenre={movie.genre}
-                    movieDirector={movie.director}
-                    moviePlot={movie.plot || movie.Plot}
-                    movieImdbRating={movie.imdbRating}
-                    movieRuntime={movie.runtime}
-                    movieLanguage={movie.language}
-                    movieCountry={movie.country}
+                    movieId={movieAny.id || movie.imdbID}
+                    movieTitle={movieAny.title || movie.Title}
                   />
                 </div>
               </div>

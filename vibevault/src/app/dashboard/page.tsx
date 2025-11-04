@@ -9,15 +9,17 @@ import { MovieDiscoveryService } from '@/lib/movie-discovery-service';
 export default async function DashboardPage() {
   const session = await auth();
   
-  if (!session) {
+  if (!session?.user?.id) {
     redirect('/login');
   }
 
+  const userId = session.user.id;
+
   // Get real statistics
   const [watchlistStats, totalMovies, discoveryCount] = await Promise.all([
-    WatchlistService.getWatchlistStats(session.user.id),
+    WatchlistService.getWatchlistStats(userId),
     MovieService.getAllMovies(1).then(movies => movies.length),
-    MovieDiscoveryService.getDiscoveryCount(session.user.id)
+    MovieDiscoveryService.getDiscoveryCount(userId)
   ]);
 
   return (

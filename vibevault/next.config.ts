@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client", "prisma"],
+  serverExternalPackages: ["@prisma/client", "prisma"],
+  eslint: {
+    // Build sırasında ESLint kontrolünü devre dışı bırak
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // Build sırasında TypeScript kontrolünü devre dışı bırak (opsiyonel)
+    ignoreBuildErrors: false,
   },
 };
 

@@ -54,7 +54,7 @@ export async function GET() {
             }
           }
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { discoveredAt: 'desc' }
       })
     ]);
 
@@ -106,7 +106,7 @@ export async function GET() {
           title: discovery.movie.title,
           year: discovery.movie.year
         },
-        discoveredAt: discovery.createdAt
+        discoveredAt: discovery.discoveredAt
       })),
       summary: {
         totalMovies: watchlistItems.length,

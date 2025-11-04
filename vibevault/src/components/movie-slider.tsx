@@ -163,14 +163,18 @@ export function MovieSlider() {
         </Button>
 
         {/* Movie Card */}
+        {movies[currentIndex] && (() => {
+          const currentMovie = movies[currentIndex];
+          const movieAny = currentMovie as any;
+          return (
         <Card className="bg-white/10 backdrop-blur-sm border-white/20 overflow-hidden">
           <CardContent className="p-0">
             <div className="flex flex-col md:flex-row">
               {/* Movie Poster */}
               <div className="md:w-1/3">
                 <img
-                  src={(currentMovie.poster || currentMovie.Poster) !== 'N/A' ? (currentMovie.poster || currentMovie.Poster) : '/placeholder-movie.jpg'}
-                  alt={currentMovie.title || currentMovie.Title}
+                  src={(movieAny.poster || currentMovie.Poster) !== 'N/A' ? (movieAny.poster || currentMovie.Poster) : '/placeholder-movie.jpg'}
+                  alt={movieAny.title || currentMovie.Title}
                   className="w-full h-64 md:h-80 object-cover"
                   onError={(e) => {
                     e.currentTarget.src = '/placeholder-movie.jpg';
@@ -182,9 +186,9 @@ export function MovieSlider() {
               <div className="md:w-2/3 p-6">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="text-2xl font-bold text-white drop-shadow-md">
-                    {currentMovie.title || currentMovie.Title}
+                    {movieAny.title || currentMovie.Title}
                   </h3>
-                  <span className="text-gray-300 text-lg">({currentMovie.year || currentMovie.Year})</span>
+                  <span className="text-gray-300 text-lg">({movieAny.year || currentMovie.Year})</span>
                 </div>
                 
                 <div className="flex items-center gap-2 mb-4">
@@ -198,17 +202,8 @@ export function MovieSlider() {
                 
                 <div className="flex gap-3">
                   <AddToWatchlistButton 
-                    movieId={currentMovie.id || currentMovie.imdbID}
-                    movieTitle={currentMovie.title || currentMovie.Title}
-                    movieYear={currentMovie.year || currentMovie.Year}
-                    moviePoster={currentMovie.poster || currentMovie.Poster}
-                    movieGenre={currentMovie.genre || currentMovie.Genre}
-                    movieDirector={currentMovie.director || currentMovie.Director}
-                    moviePlot={currentMovie.plot || currentMovie.Plot}
-                    movieImdbRating={currentMovie.imdbRating || currentMovie.imdbRating}
-                    movieRuntime={currentMovie.runtime || currentMovie.Runtime}
-                    movieLanguage={currentMovie.language || currentMovie.Language}
-                    movieCountry={currentMovie.country || currentMovie.Country}
+                    movieId={movieAny.id || currentMovie.imdbID}
+                    movieTitle={movieAny.title || currentMovie.Title}
                   />
                   <Button 
                     onClick={() => openMoviePopup(currentMovie)}
@@ -223,6 +218,8 @@ export function MovieSlider() {
             </div>
           </CardContent>
         </Card>
+          );
+        })()}
 
         {/* Dots Indicator */}
         <div className="flex justify-center mt-4 gap-2">

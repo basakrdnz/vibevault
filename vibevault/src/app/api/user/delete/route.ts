@@ -10,36 +10,38 @@ export async function DELETE() {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
+    const userId = session.user.id;
+
     // Delete all user-related data in correct order (due to foreign key constraints)
     await prisma.$transaction(async (tx) => {
       // Delete mood entries
       await tx.moodEntry.deleteMany({
-        where: { userId: session.user.id }
+        where: { userId }
       });
 
       // Delete movie discoveries
       await tx.movieDiscovery.deleteMany({
-        where: { userId: session.user.id }
+        where: { userId }
       });
 
       // Delete watchlist items
       await tx.watchlistItem.deleteMany({
-        where: { userId: session.user.id }
+        where: { userId }
       });
 
       // Delete sessions
       await tx.session.deleteMany({
-        where: { userId: session.user.id }
+        where: { userId }
       });
 
       // Delete accounts
       await tx.account.deleteMany({
-        where: { userId: session.user.id }
+        where: { userId }
       });
 
       // Finally delete the user
       await tx.user.delete({
-        where: { id: session.user.id }
+        where: { id: userId }
       });
     });
 

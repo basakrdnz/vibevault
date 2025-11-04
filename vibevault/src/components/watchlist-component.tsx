@@ -133,9 +133,9 @@ export function WatchlistComponent() {
     // Search filter
     if (searchQuery) {
       filtered = filtered.filter(item => 
-        item.movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.movie.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.movie.director.toLowerCase().includes(searchQuery.toLowerCase())
+        item.movie.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.movie.genre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.movie.director?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     
