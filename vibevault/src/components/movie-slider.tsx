@@ -180,6 +180,7 @@ export function MovieSlider() {
                     e.currentTarget.src = '/placeholder-movie.jpg';
                   }}
                 />
+                
               </div>
               
               {/* Movie Info */}
