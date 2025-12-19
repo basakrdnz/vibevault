@@ -33,16 +33,22 @@ export async function POST(request: NextRequest) {
         );
       }
       
-      if (error.message.includes('Invalid')) {
+      if (error.message.includes('Invalid') || error.message.includes('validation')) {
         return NextResponse.json(
           { error: error.message },
           { status: 400 }
         );
       }
+
+      // Return the actual error message for debugging
+      return NextResponse.json(
+        { error: error.message || 'Registration failed' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error. Please try again.' },
       { status: 500 }
     );
   }

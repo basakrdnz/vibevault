@@ -1,10 +1,18 @@
 import NextAuth from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { prisma } from './db';
 import bcrypt from 'bcryptjs';
 
-const authOptions = {
+// NextAuth v5 requires AUTH_SECRET environment variable
+if (!process.env.AUTH_SECRET) {
+  throw new Error(
+    'AUTH_SECRET environment variable is required. Please set it in your .env.local file. ' +
+    'You can generate one by running: openssl rand -base64 32'
+  );
+}
+
+const authOptions: NextAuthConfig = {
   providers: [
     Credentials({
       name: 'credentials',
@@ -44,15 +52,14 @@ const authOptions = {
     }),
   ],
   session: {
-    strategy: 'jwt' as const,
+    strategy: 'jwt',
   },
   pages: {
     signIn: '/login',
-    signUp: '/register',
+    signOut: '/login',
   },
   callbacks: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -60,8 +67,7 @@ const authOptions = {
       }
       return token;
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async session({ session, token }: any) {
+    async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
@@ -70,6 +76,7 @@ const authOptions = {
       return session;
     },
   },
+  trustHost: true, // Required for production deployments
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);

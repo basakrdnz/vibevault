@@ -36,11 +36,13 @@ export function LoginForm() {
         email: data.email,
         password: data.password,
         redirect: false,
+        callbackUrl: '/dashboard',
       });
       
       console.log('📊 SignIn result:', result);
       
       if (result?.error) {
+        console.error('❌ SignIn error:', result.error);
         setError('Invalid credentials. Please try again.');
         return;
       }
@@ -49,10 +51,13 @@ export function LoginForm() {
         console.log('✅ Login successful');
         router.push('/dashboard');
         router.refresh();
+      } else if (result?.url) {
+        // Handle redirect
+        router.push(result.url);
       }
     } catch (err) {
       console.error('❌ Login failed:', err);
-      setError('Login failed. Please try again.');
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
