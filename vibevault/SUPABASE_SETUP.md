@@ -58,8 +58,8 @@ Bu rehber, VibeVault projesini Supabase PostgreSQL veritabanı ile çalıştırm
 
 ### 3.3. Diğer Environment Variables Kontrolü
 Aşağıdaki değişkenlerin de ayarlandığından emin olun:
-- `NEXTAUTH_URL`: Production URL'iniz (örn: `https://vibevault.vercel.app`)
-- `NEXTAUTH_SECRET`: Güçlü bir secret key (rastgele string oluşturun)
+- `AUTH_SECRET`: **ZORUNLU** - Güçlü bir secret key (oluşturmak için: `openssl rand -base64 32`)
+- `AUTH_URL`: Production URL'iniz (örn: `https://vibevault.vercel.app`) - Önerilir
 
 ## 📋 Adım 4: Database Migration (Schema Oluşturma)
 
@@ -118,8 +118,8 @@ Eğer local development için de Supabase kullanmak isterseniz:
 1. `vibevault/.env.local` dosyası oluşturun:
    ```env
    DATABASE_URL="postgresql://postgres:YOUR-PASSWORD@db.PROJECT-REF.supabase.co:5432/postgres?sslmode=require"
-   NEXTAUTH_URL="http://localhost:3000"
-   NEXTAUTH_SECRET="your-local-secret-key"
+   AUTH_SECRET="your-local-secret-key-generate-with-openssl-rand-base64-32"
+   AUTH_URL="http://localhost:3000"
    ```
 
 2. Prisma client generate edin:
