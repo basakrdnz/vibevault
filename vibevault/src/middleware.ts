@@ -1,32 +1,41 @@
-import { auth } from '@/lib/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
-
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  
   // Allow access to public routes
-  if (nextUrl.pathname.startsWith('/api/auth') || 
-      nextUrl.pathname === '/' ||
-      nextUrl.pathname.startsWith('/login') ||
-      nextUrl.pathname.startsWith('/register')) {
+  if (
+    pathname.startsWith('/api/auth') ||
+    pathname === '/' ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/register')
+  ) {
     return NextResponse.next();
   }
-  
+
+  // Check authentication for protected routes
+  const token = await getToken({ 
+    req, 
+    secret: process.env.AUTH_SECRET 
+  });
+
+  const isLoggedIn = !!token;
+
   // Require authentication for protected routes
   if (!isLoggedIn && (
-    nextUrl.pathname.startsWith('/dashboard') ||
-    nextUrl.pathname.startsWith('/watchlist') ||
-    nextUrl.pathname.startsWith('/movies') ||
-    nextUrl.pathname.startsWith('/mood-tracker') ||
-    nextUrl.pathname.startsWith('/profile') ||
-    nextUrl.pathname.startsWith('/social')
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/watchlist') ||
+    pathname.startsWith('/movies') ||
+    pathname.startsWith('/mood-tracker') ||
+    pathname.startsWith('/profile') ||
+    pathname.startsWith('/social')
   )) {
-    return NextResponse.redirect(new URL('/login', nextUrl));
+    return NextResponse.redirect(new URL('/login', req.url));
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
@@ -36,6 +45,5 @@ export const config = {
     '/mood-tracker/:path*',
     '/profile/:path*',
     '/social/:path*',
-    '/api/auth/register',
   ],
 };
