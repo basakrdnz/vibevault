@@ -12,7 +12,7 @@ Vercel'de şu environment variable'ları ekleyin:
 
 ```env
 # Supabase Connection String
-DATABASE_URL="postgresql://postgres:NZOJN3JTHtRaIX0a@db.qbiuwdbxzknjsxqsmfbe.supabase.co:5432/postgres?sslmode=require"
+DATABASE_URL="postgresql://postgres:1sEITwMxzJjhvwOl@db.hylbhivivpbqczbyosrw.supabase.co:5432/postgres?sslmode=require"
 
 # NextAuth Secret (production için)
 AUTH_SECRET="ncTsNvU0G4CX0EiGJHpe/llrmjBZvK0k7FQJ8V8ff6M="
