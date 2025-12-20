@@ -18,7 +18,7 @@ DATABASE_URL="postgresql://postgres:1sEITwMxzJjhvwOl@db.hylbhivivpbqczbyosrw.sup
 AUTH_SECRET="ncTsNvU0G4CX0EiGJHpe/llrmjBZvK0k7FQJ8V8ff6M="
 
 # Production URL (Vercel domain'inizi buraya yazın)
-AUTH_URL="https://your-domain.vercel.app"
+AUTH_URL="https://vibevault-six.vercel.app"
 ```
 
 **Not:** `AUTH_URL` kısmını Vercel'de size verilen gerçek domain ile değiştirin.
